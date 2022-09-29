@@ -14,17 +14,10 @@ CACHE_ON_VALUE = 1
 CACHE_FLUSH_VALUE = 2
 
 
-# Helper function to convert register string to index. I.e. register labelled 'R2' should correspond to int index 2
 def convert_register_to_index(value):
     return int(value[1:])
 
 
-# CPU class to implement the bulk of CPU Simulator requirements. Member properties include:
-# CPU Counter - Int representing the number of the instruction being parsed
-# Registers - List used to represent internal registers used by the CPU
-# Cache Flag - boolean representing whether or not the cache is to be used
-# Cache - instance of Cache object instantiated for CPU
-# Memory Bus - instance of Memory Bus object instantiated for CPU
 class CPU:
 
     def __init__(self):
@@ -68,8 +61,6 @@ class CPU:
     def write_memory_bus(self, address, value):
         self.memory_bus.write_memory_bus(address, value)
 
-    # --- Sample implementations for ADD, ADDI, J, and Cache instructions ---
-
     def jump_instruction(self, target):
         self.cpu_counter = int(target)
 
@@ -81,7 +72,6 @@ class CPU:
         self.registers[convert_register_to_index(destination)] = self.registers[convert_register_to_index(source)] + \
                                                                  int(immediate)
 
-    # Method to implement cache instruction. 0 = OFF, 1 = ON, 2 = Flush Cache
     def cache_instruction(self, value):
         if value == CACHE_OFF_VALUE:
             self.set_cache_flag(False)
@@ -90,12 +80,6 @@ class CPU:
         if value == CACHE_FLUSH_VALUE:
             self.flush_cache()
 
-    # --- Add implementations for further instructions below ---
-
-    # --------------------------------------------------------- #
-
-    # Main parser method used to interpret instructions from input file.
-    # Check value of operator and call subsequent helper function
     def parse_instruction(self, instruction):
         instruction_parsed = instruction.split(",")
         print("Reading instruction: " + instruction)
